@@ -13,6 +13,7 @@ using XFlow.Modules.Inventory.ClientServer.Systems;
 using XFlow.Net.ClientServer;
 using XFlow.Net.ClientServer.Ecs.Components;
 using XFlow.Net.ClientServer.Ecs.Systems;
+using XFlow.Modules.Mech.ClientServer.Systems;
 
 #if CLIENT
 using Game.Ecs.Client.Systems;
@@ -34,18 +35,18 @@ namespace Game.ClientServer
         public EcsSystemsFactory(DiContainer di)
         {
             _container = new EcsSystemsContainer(di);
-            
+
             /*
              * регистрация аналогична прямым вызовам через systems.AddSystem, за тем исключением,
              * что система будет создана через Zenject 
              */
-            
+
             /*
              * системы регистрируются в порядке следования
              * RegisterServer - система, которая будет создана и на стороне сервера (или синглплеера)
              * Register - система, регистрируется для всех случаев
              */
-            
+
             /*
              ПРИМЕРЫ
              
@@ -61,7 +62,7 @@ namespace Game.ClientServer
              а позже результат ее работы долетит и с сервера
             
              */
-            
+
             /*
              #if SERVER - Определено на сервере        
                                
@@ -74,17 +75,17 @@ namespace Game.ClientServer
 #if SERVER
             _container.Register<CreateGameSystem>();
 #endif
-            
-            _container.RegisterServer<CustomInitSystem>();
+          
+            _container.RegisterServer<ArkanoidGameSystem>();
             _container.RegisterServer<ManagePlayerSystem>();
            
            
             //_container.RegisterServer<AIPlayerSystem>();
-            _container.Register<AIPlayerSystem>();
+            //_container.Register<AIPlayerSystem>();
 
-            _container.Register<MoveToTargetPositionSystem>();
+            //_container.Register<MoveToTargetPositionSystem>();
             _container.Register<MoveSystem>();
-            _container.Register<LookDirectionSystem>();
+            //_container.Register<LookDirectionSystem>();
             _container.Register<SimpleMoveSystem>();
             _container.Register<UnitMoveSystem>();
             _container.Register<FollowSystem>();
@@ -115,7 +116,7 @@ namespace Game.ClientServer
             _container.Register<FireSystem>();
 
             _container.Register<ApplyForceSystem>();
-            
+
             
 
 
@@ -140,9 +141,11 @@ namespace Game.ClientServer
             //container.Register<Box2DCreateContactsSystem>();
             _container.Register<Box2DUpdateInternalObjectsSystem>();
             _container.Register<Box2DUpdateSystem>();
-            _container.Register<BulletContactSystem>();      
+            //_container.Register<BulletContactSystem>();
+            _container.Register<ArkanoidContactSystem>();
             _container.Register<DamageApplySystem>();
-            
+            _container.Register<SetVelocitySystem>();
+            _container.Register<ArkanoidReinitSystem>();
             //уничтожение объектов сделаем серверным чтоб не было ошибок предсказания
             _container.RegisterServer<DestroyDamagedSystem>();
 
@@ -152,7 +155,7 @@ namespace Game.ClientServer
             
             _container.Register<DeleteEventEntitiesSystem>();
             _container.Register<InventoryRemoveEntitySystem>();
-            _container.Register<Box2DDestroyBodiesSystem>();
+            _container.Register<Ecs.ClientServer.Systems.Box2DDestroyBodiesSystem>();
             
             //write final Box2d transforms to components
             _container.Register<Box2DWriteBodiesToComponentsSystem>();

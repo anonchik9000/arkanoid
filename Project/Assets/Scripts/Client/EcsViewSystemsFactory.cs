@@ -41,6 +41,8 @@ namespace Game.Client
             _container.Register<CreateMechViewSystem>();
             _container.Register<MechAnimationSystem>();
 
+            _container.Register<ArkanoidViewSystem>();
+
             _container.Register<CharacterAnimationSystem>();
             
             _container.Register<FootprintViewSystem>();
@@ -57,7 +59,7 @@ namespace Game.Client
             _container.Register<SyncTransformSystem>();
             _container.Register<RotateCharacterSystem>();
             _container.Register<RotateRigidbodySystem>();
-            _container.Register<CameraFollowSystem>();
+            //_container.Register<CameraFollowSystem>();
             
             _container.Register<ResetMouseDownSystem>();
 

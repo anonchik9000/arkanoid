@@ -210,7 +210,7 @@ namespace Game.Client.Services
                 Box2DServices.AddDistanceJointToDefinition(world, entityA, entityB);
             });
 
-            ForEachObject<RevoluteJointView>(joint =>
+            /*ForEachObject<RevoluteJointView>(joint =>
             {
                 var entityA = GetOrCreateGameEntity(joint.gameObject);
                 var entityB = GetOrCreateGameEntity(joint.ConnectedBody.gameObject);
@@ -236,7 +236,7 @@ namespace Game.Client.Services
                 data.CollideConnected = joint.CollideConnected;
 
                 Box2DServices.AddRevoluteJointToDefinition(world, entityA, data);
-            });
+            });*/
             
             ForEachObject<SpawnGunView>(view =>
             {
@@ -267,7 +267,7 @@ namespace Game.Client.Services
             //var clip = clips.First(clip => clip.name == "Walking");
             //todo calculate exact speed
 
-            world.AddUnique<AverageSpeedComponent>().Value = 1.72f; //clip.averageSpeed;
+            world.AddUnique<AverageSpeedComponent>().Value = 8f; //clip.averageSpeed;
         }
     }
 }

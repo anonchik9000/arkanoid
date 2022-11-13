@@ -46,22 +46,22 @@ namespace Game.Client
                 plane.Raycast(ray, out var dist);
 
                 var point = ray.GetPoint(dist);
-                
+                point.z = 0;
                 controlService.MoveToPoint(point);
                 return;
             }
 
             var hor = Input.GetAxis("Horizontal");
-            var ver = Input.GetAxis("Vertical");
+            //var ver = Input.GetAxis("Vertical");
             //Debug.Log(joystick.Direction);
             
-            if (Mathf.Abs(hor) > 0.01f || Mathf.Abs(ver) > 0.01f)
+            if (Mathf.Abs(hor) > 0.01f)// || Mathf.Abs(ver) > 0.01f)
             {
-                MoveDir(hor, ver);
+                MoveDir(hor, 0);
             }
             else if (joystick.Direction.magnitude > 0.01f)
             {
-                MoveDir(joystick.Direction.x, joystick.Direction.y);
+                MoveDir(joystick.Direction.x, 0);
             }else
             {
                 controlService.StopMoveToDirection();
