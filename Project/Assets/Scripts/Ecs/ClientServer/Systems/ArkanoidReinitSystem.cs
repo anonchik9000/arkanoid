@@ -1,6 +1,5 @@
 using UnityEngine;
 using XFlow.Ecs.ClientServer.Components;
-using XFlow.Ecs.ClientServer.Utils;
 using XFlow.EcsLite;
 using XFlow.Modules.Box2D.ClientServer;
 using XFlow.Modules.Box2D.ClientServer.Api;
@@ -12,18 +11,12 @@ namespace XFlow.Modules.Mech.ClientServer.Systems
 {
     public class ArkanoidReinitSystem : IEcsRunSystem, IEcsInitSystem
     {
-        private MechService _mechService;
         private EcsWorld _world;
         private EcsFilter _ballFilter;
         private EcsFilter _blockCreatedFilter;
-        private EcsFilter _destroyFilter;
         private EcsPool<PositionComponent> _positionsPool;
         private const float _deadLine = -3;
 
-        public ArkanoidReinitSystem(MechService mechService)
-        {
-            this._mechService = mechService;
-        }
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();

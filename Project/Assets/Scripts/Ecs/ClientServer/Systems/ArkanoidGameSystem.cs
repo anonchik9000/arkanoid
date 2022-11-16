@@ -1,6 +1,4 @@
-﻿using Game.ClientServer;
-using Game.ClientServer.Services;
-using Game.Ecs.ClientServer.Components;
+﻿using Game.Ecs.ClientServer.Components;
 
 using UnityEngine;
 using XFlow.Ecs.ClientServer.Components;
@@ -8,8 +6,6 @@ using XFlow.EcsLite;
 using XFlow.Modules.Box2D.ClientServer;
 using XFlow.Modules.Box2D.ClientServer.Api;
 using XFlow.Modules.Box2D.ClientServer.Components;
-using XFlow.Modules.Box2D.ClientServer.Components.Colliders;
-using XFlow.Modules.Mech.ClientServer;
 using XFlow.Modules.Mech.ClientServer.Components;
 using XFlow.Utils;
 
@@ -17,7 +13,6 @@ namespace Game.Ecs.ClientServer.Systems
 {
     public class ArkanoidGameSystem : IEcsInitSystem,IEcsRunSystem
     {
-        private MechService _mechService;
         private EcsFilter _ballFilter;
         private EcsFilter _blockFilter;
         private EcsFilter _createBallFilter;
@@ -27,26 +22,9 @@ namespace Game.Ecs.ClientServer.Systems
         private EcsPool<ArkanoidCreateBallComponent> _createdBallPool;
         
         private EcsWorld _world;
-        public ArkanoidGameSystem(MechService mechService)
-        {
-            this._mechService = mechService;
-        }
         
         public void Init(EcsSystems systems)
         {
-            _world = systems.GetWorld();
-            var mechEntity = _mechService.CreateMechEntity(_world);
-            mechEntity.EntityGetRef<PositionComponent>(_world).Value = new Vector3(5, 0, -15f);
-            mechEntity.EntityAdd<InteractableComponent>(_world);
-            mechEntity.EntityAdd<AverageSpeedComponent>(_world).Value = 8;
-
-            Box2DServices.AddRigidbodyDefinition(_world, mechEntity, BodyType.Dynamic).SetDensity(1000).SetFriction(0.3f).SetRestitutionThreshold(0.5f);
-            Box2DServices.AddCircleColliderToDefinition(_world, mechEntity, 1.2f, new Vector2(-1.5f, 0));
-            Box2DServices.AddCircleColliderToDefinition(_world, mechEntity, 1.2f, new Vector2(1.5f, 0));
-
-            
-
-            //Arkanoidball
             CreateBall(new Vector3(-3, 0.6f, 1.8f));
 
             _createBallFilter = _world.Filter<ArkanoidCreateBallComponent>().End();

@@ -1,5 +1,4 @@
-﻿using Game.UI.Mono;
-using Game.UIView;
+﻿using Game.UIView;
 using Game.View;
 using UnityEngine;
 using XFlow.Modules.Inventory.Client.Demo.StaticData;

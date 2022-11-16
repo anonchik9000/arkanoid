@@ -1,4 +1,3 @@
-using Game.View;
 using TMPro;
 using UnityEngine.UI;
 using XFlow.Modules.States;
