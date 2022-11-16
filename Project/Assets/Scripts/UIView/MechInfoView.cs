@@ -8,8 +8,7 @@ namespace Game.UIView
     public class MechInfoView : BaseUIView
     {
         public Button ButtonClose;
-        public Button ButtonLeaveMech;
-        public Button ButtonJoinMech;
-        public TMP_Text TextMechInfo;
+        public Button ButtonSetName;
+        public TMP_InputField NameInput;
     }
 }

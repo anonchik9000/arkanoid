@@ -39,6 +39,8 @@ namespace Game.UI
             _world = world;
             _mechService = mechService;
 
+            
+
             view.OnLateUpdate = () =>
             {
                 _hpViewManager.LateUpdate();

@@ -3,11 +3,13 @@ using Game.Ecs.ClientServer.Components;
 using Game.Ecs.ClientServer.Components.Input;
 using Game.UI;
 using Game.View;
+using System;
 using UnityEngine;
 using XFlow.Ecs.Client.Components;
 using XFlow.Ecs.ClientServer;
 using XFlow.Ecs.ClientServer.Components;
 using XFlow.EcsLite;
+using XFlow.Modules.Mech.ClientServer.Components;
 using XFlow.Modules.Tick.Other;
 using XFlow.Net.Client;
 using XFlow.Net.Client.Services;
@@ -42,6 +44,15 @@ namespace Game.Client.Services
                 int entity = -1;
                 ClientPlayerService.TryGetControlledEntity(_world, out entity);
                 return entity;
+            }
+        }
+
+        public void SetPlayerName(string name)
+        {
+            int playerEntity = unitEntity;
+            if (playerEntity >= 0)
+            {
+                playerEntity.EntityGetOrCreateRef<ArkanoidPlayerNameComponent>(_world).Name = name;
             }
         }
 
