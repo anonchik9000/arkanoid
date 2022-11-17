@@ -48,6 +48,7 @@ namespace Game.Ecs.ClientServer.Systems
         {
             var poolInputShot   = _inputWorld.GetPool<InputShotComponent>();
             var poolPlayer      = _inputWorld.GetPool<InputPlayerEntityComponent>();
+            var poolPlayerName = _inputWorld.GetPool<InputPlayerNameComponent>();
             var poolInputMoveDir= _inputWorld.GetPool<InputMoveDirectionComponent>();
             var poolInputMoveTo = _inputWorld.GetPool<InputMoveToPointComponent>();
             var poolMoveItem = _inputWorld.GetPool<MoveItemComponent>();
@@ -76,7 +77,10 @@ namespace Game.Ecs.ClientServer.Systems
                 {
                     Shoot(unitEntity, poolInputShot.Get(inputEntity));
                 }
-
+                if(poolPlayerName.Has(inputEntity))
+                {
+                    SetPlayerName(unitEntity,poolPlayerName.Get(inputEntity).Name.ToString());
+                }
                 if (poolInputMoveDir.Has(inputEntity))
                 {
                     Move(unitEntity, poolInputMoveDir.Get(inputEntity).Direction);
@@ -114,6 +118,8 @@ namespace Game.Ecs.ClientServer.Systems
                 }
             }
         }
+
+       
 
         public void EnterLeaveMech(int playerEntity, int unitEntity)
         {
@@ -247,8 +253,11 @@ namespace Game.Ecs.ClientServer.Systems
             });
         }
 
+        private void SetPlayerName(int entity,string name)
+        {
+            entity.EntityGetOrCreateRef<ArkanoidPlayerNameComponent>(_world).Name = name;
+        }
 
-        
         private void Move(int entity, Vector3 dir)
         {
             if (entity.EntityHas<CantMoveComponent>(_world))

@@ -26,6 +26,8 @@ namespace Game
             _states.RegisterState(_rootState);
         
             _states.StartFrom<RootState>();
+
+            _states.Push<MechInfoState>();
         }
 
         private void RegisterStateWithUI<T>(StateWithUI<T> state) where T:BaseUIView

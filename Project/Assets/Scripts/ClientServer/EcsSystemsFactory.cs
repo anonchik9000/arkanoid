@@ -142,10 +142,10 @@ namespace Game.ClientServer
             _container.Register<Box2DUpdateInternalObjectsSystem>();
             _container.Register<Box2DUpdateSystem>();
             //_container.Register<BulletContactSystem>();
-            _container.Register<ArkanoidContactSystem>();
+            _container.RegisterServer<ArkanoidContactSystem>();
             _container.Register<DamageApplySystem>();
             _container.Register<SetVelocitySystem>();
-            _container.Register<ArkanoidReinitSystem>();
+            _container.RegisterServer<ArkanoidReinitSystem>();
             //уничтожение объектов сделаем серверным чтоб не было ошибок предсказания
             _container.RegisterServer<DestroyDamagedSystem>();
 

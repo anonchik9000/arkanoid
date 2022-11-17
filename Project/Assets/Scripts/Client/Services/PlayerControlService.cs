@@ -49,11 +49,14 @@ namespace Game.Client.Services
 
         public void SetPlayerName(string name)
         {
-            int playerEntity = unitEntity;
-            if (playerEntity >= 0)
+            if (unitEntity == -1)
             {
-                playerEntity.EntityGetOrCreateRef<ArkanoidPlayerNameComponent>(_world).Name = name;
+                Debug.LogWarning("unitEntity == -1");
+                return;
             }
+            var inputName = new InputPlayerNameComponent();
+            inputName.Name = name;
+            Apply(inputName);
         }
 
         private int tick => _world.GetTick();

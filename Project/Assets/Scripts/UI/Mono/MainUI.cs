@@ -10,6 +10,7 @@ namespace Game.UI.Mono
 {
     public class MainUI : MonoBehaviour
     {
+        public TextMeshProUGUI Score;
         public Button ShotButton;
         public Button InteractionButton;
         public Button InventoryButton;

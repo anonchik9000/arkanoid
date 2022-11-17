@@ -1,3 +1,4 @@
+using Game.View;
 using UnityEngine;
 using XFlow.Ecs.Client.Components;
 using XFlow.Ecs.ClientServer.Components;
@@ -10,9 +11,9 @@ namespace XFlow.Modules.Mech.Client.Systems
     public class ArkanoidViewSystem : IEcsRunSystem, IEcsInitSystem
     {
         private EcsWorld _world;
-        private EcsFilter _ballFilter;
-        private EcsFilter _blockFilter;
-        private EcsPool<ArkanoidBlockComponent> _blockPool;
+        private EcsFilter _filterBall;
+        private EcsFilter _filterBlock;
+        private EcsPool<ArkanoidBlockComponent> _poolBlock;
         private GameObject _ballPrefab;
         private GameObject _blockPrefab;
 
@@ -21,22 +22,22 @@ namespace XFlow.Modules.Mech.Client.Systems
             _ballPrefab = Resources.Load<GameObject>("ArkanoidBall");
             _blockPrefab = Resources.Load<GameObject>("ArkanoidBlock");
             _world = systems.GetWorld();
-            _ballFilter = _world.Filter<ArkanoidBallComponent>()
+            _filterBall = _world.Filter<ArkanoidBallComponent>()
                 .Exc<TransformComponent>().End();
 
-            _blockFilter = _world.Filter<ArkanoidBlockComponent>()
+            _filterBlock = _world.Filter<ArkanoidBlockComponent>()
                 .Exc<TransformComponent>().End();
 
-            _blockPool = _world.GetPool<ArkanoidBlockComponent>();
+            _poolBlock = _world.GetPool<ArkanoidBlockComponent>();
         }
 
         public void Run(EcsSystems systems)
         {
-            foreach (var entity in _ballFilter)
+            foreach (var entity in _filterBall)
             {
                 CreateView(entity, _ballPrefab);
             }
-            foreach (var entity in _blockFilter)
+            foreach (var entity in _filterBlock)
             {
                 CreateView(entity, _blockPrefab);
             }
@@ -47,9 +48,9 @@ namespace XFlow.Modules.Mech.Client.Systems
             var go = GameObject.Instantiate(prefab);
             entity.EntityAdd<TransformComponent>(_world).Transform = go.transform;
             go.transform.position = entity.EntityGet<PositionComponent>(_world).Value;
-            if(_blockPool.Has(entity) && _blockPool.Get(entity).BallCreated>0)
+            if(_poolBlock.Has(entity) && _poolBlock.Get(entity).BallCreateCount>0)
             {
-                go.transform.Find("Bonus").gameObject.SetActive(true);
+                go.GetComponent<BlockView>().Init(_poolBlock.Get(entity).BallCreateCount);
             }
         }
     }

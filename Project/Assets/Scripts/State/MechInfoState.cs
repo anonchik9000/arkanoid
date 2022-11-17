@@ -33,14 +33,11 @@ namespace Game.State
 
         protected override void DoInitialize()
         {
-            _view.ButtonClose.onClick.AddListener(() =>
-            {
-                Close();
-            });
             
             _view.ButtonSetName.onClick.AddListener(() =>
             {
                 _playerControlService.SetPlayerName(_view.NameInput.text);
+                Close();
             });
             
         }

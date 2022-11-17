@@ -268,6 +268,7 @@ namespace Game.Client.Services
             //todo calculate exact speed
 
             world.AddUnique<AverageSpeedComponent>().Value = 8f; //clip.averageSpeed;
+            
         }
     }
 }

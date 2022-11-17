@@ -3,6 +3,7 @@ using Game.Ecs.ClientServer.Components;
 using Game.Ecs.ClientServer.Components.Inventory;
 using XFlow.EcsLite;
 using XFlow.Modules.Inventory.ClientServer.Components;
+using XFlow.Modules.Mech.ClientServer.Components;
 using XFlow.Net.ClientServer.Ecs.Components;
 using XFlow.Utils;
 

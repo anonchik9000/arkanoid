@@ -47,14 +47,6 @@ namespace Game.Ecs.ClientServer.Systems
                     continue;
                 }
 
-                if (entityA == entityB)
-                {
-                    //контакт сам с собой???
-                    _world.LogError($"self contact wtf {entityA}");
-                    continue;
-                }
-
-
                 if(_ballPool.Has(entityA) && _blockPool.Has(entityB))
                 {
                     BlockDamage(entityB);
@@ -74,14 +66,15 @@ namespace Game.Ecs.ClientServer.Systems
             if(_blockPool.Has(entity))
             {
                 var cmp = _blockPool.Get(entity);
-                if (cmp.BallCreated > 0)
+                if (cmp.BallCreateCount > 0)
                 {
                     int eventEntity = _world.NewEntity();
                     ref var contact = ref _world.GetPool<ArkanoidCreateBallComponent>().GetOrCreateRef(eventEntity);
-                    contact.Count = cmp.BallCreated;
+                    contact.Count = cmp.BallCreateCount;
                     contact.Positon = _world.GetPool<PositionComponent>().Get(entity).Value;
                 }
             }
+            _world.GetUniqueRef<ArkanoidScoresComponent>().Value++;
             _world.GetPool<DeletedEntityComponent>().Add(entity);
         }
     }

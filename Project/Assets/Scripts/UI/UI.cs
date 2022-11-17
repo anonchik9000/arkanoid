@@ -14,21 +14,22 @@ namespace Game.UI
     public class UI: 
         EventsSystem<FoodCollectedComponent>.IAnyComponentChangedListener,
         EventsSystem<AmmoCollectedComponent>.IAnyComponentChangedListener,
-        EventsSystem<WeaponComponent>.IAnyComponentChangedListener,
-        EventsSystem<TickComponent>.IAnyComponentChangedListener
+        EventsSystem<WeaponComponent>.IAnyComponentChangedListener, 
+        EventsSystem<TickComponent>.IAnyComponentChangedListener,
+        EventsSystem<ArkanoidScoresComponent>.IAnyComponentChangedListener
     {
         public MainUI View { get; private set; }
         private EcsWorld _world;
         
         private MechService _mechService;
-        private HpViewManager _hpViewManager;
-        
+        private NameViewManager _hpViewManager;
+        private States _states;
         public UI(
             EcsWorld world, 
             MainUI view, 
             States states,
             PlayerControlService controlService,
-            HpViewManager hpViewManager,
+            NameViewManager hpViewManager,
             MechService mechService
             )
         {
@@ -82,6 +83,7 @@ namespace Game.UI
             listener.SetAnyChangedListener<FoodCollectedComponent>(this);
             listener.SetAnyChangedListener<AmmoCollectedComponent>(this);
             listener.SetAnyChangedListener<TickComponent>(this);
+            listener.SetAnyChangedListener<ArkanoidScoresComponent>(this);
         }
 
         
@@ -131,6 +133,11 @@ namespace Game.UI
             
             bool hasMech = _mechService.TryGetInteractableMechEntity(_world, controlledEntity, out int mechEntity);
             View.MechButton.gameObject.SetActive(hasMech);
+        }
+
+        public void OnAnyComponentChanged(EcsWorld world, int entity, ArkanoidScoresComponent data, bool added)
+        {
+            View.Score.text = data.Value.ToString();
         }
     }
 }

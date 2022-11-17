@@ -2,6 +2,7 @@
 using Game.Ecs.Client.Systems;
 using Game.Ecs.Client.Systems.Inventory;
 using Game.Ecs.ClientServer.Components;
+using Game.Ecs.ClientServer.Components.Input;
 using Game.Ecs.ClientServer.Components.Objective;
 using XFlow.Ecs.ClientServer.Components;
 using XFlow.EcsLite;
@@ -66,6 +67,8 @@ namespace Game.Client
             _container.Register<EventsSystem<WeaponComponent>>();
             _container.Register<EventsSystem<ButtonPressedComponent>>();
             _container.Register<EventsSystem<PlayerComponent>>();
+            _container.Register<EventsSystem<ArkanoidPlayerNameComponent>>();
+            _container.Register<EventsSystem<ArkanoidScoresComponent>>();
             _container.Register<EventsSystem<ButtonPushCompleted>>();
             _container.Register<EventsSystem<ObjectiveOpenedComponent>>();
             _container.Register<EventsSystem<ObjectiveCompletedComponent>>();

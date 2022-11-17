@@ -3,8 +3,8 @@ using Game.View;
 
 namespace Game.Ecs.Client.Components
 {
-    public struct HpViewComponent
+    public struct NameViewComponent
     {
-        public HpView View;
+        public NameView View;
     }
 }

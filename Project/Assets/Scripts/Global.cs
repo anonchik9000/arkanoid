@@ -9,7 +9,7 @@ namespace Game
     {
         public CharacterView CharacterPrefab;
         public BulletView BulletPrefab;
-        public HpView HpViewPrefab;
+        public NameView HpViewPrefab;
         public Canvas HpViewCanvas;
 
         [Header("Footprint")] 

@@ -12,40 +12,39 @@ namespace XFlow.Modules.Mech.ClientServer.Systems
     public class ArkanoidReinitSystem : IEcsRunSystem, IEcsInitSystem
     {
         private EcsWorld _world;
-        private EcsFilter _ballFilter;
-        private EcsFilter _blockCreatedFilter;
-        private EcsPool<PositionComponent> _positionsPool;
+        private EcsFilter _filterBall;
+        private EcsFilter _filterCreated;
+        private EcsPool<PositionComponent> _poolPositions;
         private const float _deadLine = -3;
 
         public void Init(EcsSystems systems)
         {
             _world = systems.GetWorld();
-            _ballFilter = _world.Filter<ArkanoidBallComponent>()
+            _filterBall = _world.Filter<ArkanoidBallComponent>()
                                 .Inc<PositionComponent>()
                                 .Exc<ArkanoidBallResetComponent>()
                                 .End();
 
-            _positionsPool = _world.GetPool<PositionComponent>();
+            _poolPositions = _world.GetPool<PositionComponent>();
 
-            _blockCreatedFilter = _world.Filter<ArkanoidBlockComponent>().End();
+            _filterCreated = _world.Filter<ArkanoidBlockComponent>().End();
         }
 
         public void Run(EcsSystems systems)
         {
             
-            foreach (var entity in _ballFilter)
+            foreach (var entity in _filterBall)
             {
-                if(_positionsPool.Get(entity).Value.z < _deadLine)
+                if(_poolPositions.Get(entity).Value.z < _deadLine)
                 {
-                    if(_ballFilter.GetEntitiesCount()==1)
+                    if(_filterBall.GetEntitiesCount()==1)
                         _world.GetPool<ArkanoidBallResetComponent>().Add(entity);
                     else
                         _world.GetPool<DeletedEntityComponent>().Add(entity);
                 }
             }
-            if(_blockCreatedFilter.GetEntitiesCount()==0)
+            if(_filterCreated.IsEmpty())
             {
-                //_world.Log("CreateBlocks");
                 CreateBlocks();
             }
         }
@@ -63,7 +62,7 @@ namespace XFlow.Modules.Mech.ClientServer.Systems
                     var block = _world.NewEntity();
                     block.EntityAdd<Rotation2DComponent>(_world);
                     ref var blockCmp =ref block.EntityAdd<ArkanoidBlockComponent>(_world);
-                    blockCmp.BallCreated = countCreatedBallBlocks>0 ? 3 : 0;
+                    blockCmp.BallCreateCount = countCreatedBallBlocks>0 ? 3 : 0;
                     countCreatedBallBlocks--;
                     block.EntityAdd<PositionComponent>(_world).Value = position;
                     Box2DServices.AddRigidbodyDefinition(_world, block, BodyType.Static).SetFriction(0).SetDensity(1000);

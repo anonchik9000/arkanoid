@@ -13,27 +13,31 @@ namespace Game.Ecs.ClientServer.Systems
 {
     public class ArkanoidGameSystem : IEcsInitSystem,IEcsRunSystem
     {
-        private EcsFilter _ballFilter;
-        private EcsFilter _blockFilter;
-        private EcsFilter _createBallFilter;
-        private EcsPool<ArkanoidBallResetComponent> _ballsPool;
-        private EcsPool<PositionComponent> _positionsPool;
-        private EcsPool<Box2DBodyComponent> _bodyPool;
-        private EcsPool<ArkanoidCreateBallComponent> _createdBallPool;
+        private EcsFilter _filterBall;
+        private EcsFilter _filterBlock;
+        private EcsFilter _filterCreateBall;
+        private EcsPool<ArkanoidBallResetComponent> _poolBalls;
+        private EcsPool<PositionComponent> _poolPositions;
+        private EcsPool<Box2DBodyComponent> _poolBody;
+        private EcsPool<ArkanoidCreateBallComponent> _poolCreatedBall;
         
         private EcsWorld _world;
         
         public void Init(EcsSystems systems)
         {
+            _world = systems.GetWorld();
+
+            _world.AddUnique<ArkanoidScoresComponent>().Value = 0;
+
             CreateBall(new Vector3(-3, 0.6f, 1.8f));
 
-            _createBallFilter = _world.Filter<ArkanoidCreateBallComponent>().End();
-            _ballFilter = _world.Filter<ArkanoidBallResetComponent>().End();
-            _blockFilter = _world.Filter<ArkanoidBlockComponent>().Exc<Box2DBodyComponent>().End();
-            _ballsPool = _world.GetPool<ArkanoidBallResetComponent>();
-            _positionsPool = _world.GetPool<PositionComponent>();
-            _bodyPool = _world.GetPool<Box2DBodyComponent>();
-            _createdBallPool = _world.GetPool<ArkanoidCreateBallComponent>();
+            _filterCreateBall = _world.Filter<ArkanoidCreateBallComponent>().End();
+            _filterBall = _world.Filter<ArkanoidBallResetComponent>().End();
+            _filterBlock = _world.Filter<ArkanoidBlockComponent>().Exc<Box2DBodyComponent>().End();
+            _poolBalls = _world.GetPool<ArkanoidBallResetComponent>();
+            _poolPositions = _world.GetPool<PositionComponent>();
+            _poolBody = _world.GetPool<Box2DBodyComponent>();
+            _poolCreatedBall = _world.GetPool<ArkanoidCreateBallComponent>();
 
             _world.GetOrCreateUniqueRef<AverageSpeedComponent>().Value = 8f; //clip.averageSpeed;
             
@@ -61,14 +65,13 @@ namespace Game.Ecs.ClientServer.Systems
 
         public void Run(EcsSystems systems)
         {
-            foreach(var entity in _ballFilter)
+            foreach(var entity in _filterBall)
             {
                 System.IntPtr body;
                 float forceValue = 200;
-                if (_bodyPool.Has(entity))
+                if (_poolBody.Has(entity))
                 {
-                    body = _bodyPool.Get(entity).BodyReference;
-                    forceValue = 350;
+                    body = _poolBody.Get(entity).BodyReference;
                 }
                 else
                 {
@@ -76,21 +79,21 @@ namespace Game.Ecs.ClientServer.Systems
                 }
                 var dir = new Vector3(Random.Range(-0.5f,0.5f),0, 1).normalized;
                 var force = dir.ToVector2XZ() * forceValue;
-                var pos = _positionsPool.Get(entity).Value;
+                var pos = _poolPositions.Get(entity).Value;
                 Box2DApiSafe.SetLinearVelocity(body, Vector2.zero);
                 Box2DApiSafe.SetPosition(body, pos.ToVector2XZ(), true);
                 Box2DApiSafe.ApplyForce(body, force, pos);
-                _ballsPool.Del(entity);
+                _poolBalls.Del(entity);
             }
-            foreach(var entity in _blockFilter)
+            foreach(var entity in _filterBlock)
             {
-                ref var pos = ref _positionsPool.GetRef(entity);
+                ref var pos = ref _poolPositions.GetRef(entity);
                 var body = Box2DServices.CreateBodyNow(_world, entity);
                 Box2DApiSafe.SetPosition(body, pos.Value.ToVector2XZ(), true);
             }
-            foreach(var entity in _createBallFilter)
+            foreach(var entity in _filterCreateBall)
             {
-                var contact = _createdBallPool.Get(entity);
+                var contact = _poolCreatedBall.Get(entity);
                 int ballCount = contact.Count;
                 for (int i = 0; i < ballCount; i++)
                 {

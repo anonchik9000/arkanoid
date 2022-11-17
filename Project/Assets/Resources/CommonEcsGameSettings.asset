@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418edcff6ff32674a957080cdb9e61d4, type: 3}
   m_Name: CommonEcsGameSettings
   m_EditorClassIdentifier: 
-  MultiPlayer: 0
+  MultiPlayer: 1
   _containers: []
   _hosts:
   - Hostname: 127.0.0.1

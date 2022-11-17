@@ -54,8 +54,8 @@ namespace Game.Installers
             Container.Bind<UI.UI>().AsSingle().NonLazy();
             Container.Bind<Canvas>().WithId("HpViewCanvas").FromInstance(global.HpViewCanvas).AsSingle();
 
-            Container.Bind<HpView>().FromInstance(global.HpViewPrefab).AsSingle();
-            Container.Bind<HpViewManager>().AsSingle().NonLazy();
+            Container.Bind<NameView>().FromInstance(global.HpViewPrefab).AsSingle();
+            Container.Bind<NameViewManager>().AsSingle().NonLazy();
 
             //register states and view
             Container.Bind<MechInfoView>().FromInstance(global.MechInfoView).AsSingle();
